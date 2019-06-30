@@ -87,12 +87,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget buildTodoItem(Todo todo) => StoreConnector<AppState, VoidCallback>(
-      converter: (store) => () => store.dispatch(CheckTodoAction(todo)),
+  Widget buildTodoItem(Todo todo) => StoreConnector<AppState, Function(bool)>(
+      converter: (store) => (b) => store.dispatch(CheckTodoAction(todo, b)),
       builder: (context, callback) => Card(
           child: CheckboxListTile(
               title: Text(todo.name),
               value: todo.checked,
               controlAffinity: ListTileControlAffinity.leading,
-              onChanged: (b) => callback())));
+              onChanged: callback)));
 }

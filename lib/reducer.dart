@@ -7,9 +7,9 @@ AppState reduce(AppState state, dynamic action) {
   } else if (action is CheckTodoAction) {
     return state
         .rebuild((stateBuilder) => stateBuilder.todos.update((update) => update
-          ..map((it) => it == action.todo
+          ..map((it) => it.name == action.todo.name
               ? action.todo.rebuild((todoBuilder) => todoBuilder
-                ..checked = !action.todo.checked
+                ..checked = action.checked
                 ..build())
               : it)));
   }

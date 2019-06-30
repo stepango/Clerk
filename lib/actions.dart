@@ -12,6 +12,7 @@ class AddTodoAction extends Action {
 
 class CheckTodoAction extends Action {
   Todo todo;
+  bool checked;
 
-  CheckTodoAction(this.todo);
+  CheckTodoAction(this.todo, this.checked);
 }
