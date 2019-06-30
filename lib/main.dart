@@ -1,6 +1,7 @@
 import 'package:clerk/actions.dart';
 import 'package:clerk/reducer.dart';
 import 'package:clerk/state.dart';
+import 'package:clerk/view_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -67,12 +68,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   .fold(0, (a, b) => a + b)
                   .toString(),
               builder: (context, num) => Text(widget.title + num))),
-      body: StoreConnector<AppState, List<Todo>>(
-          converter: (store) => store.state.todos.toList(),
-          builder: (context, list) => Center(child: ListView.builder(
+      body: StoreConnector<AppState, TodoListViewModel>(
+          converter: (store) => TodoListViewModel(store.state.todos.toList(),
+              (todo) => store.dispatch(CheckTodoAction(todo))),
+          builder: (context, vm) => Center(child: ListView.builder(
                 itemBuilder: (context, index) {
-                  if (index < list.length) {
-                    return buildTodoItem(list[index]);
+                  if (index < vm.todos.length) {
+                    return buildTodoItem(vm.todos[index], vm.callback);
                   }
                 },
               ))),
@@ -80,19 +82,17 @@ class _MyHomePageState extends State<MyHomePage> {
         converter: (store) => () => store.dispatch(
             AddTodoAction("Hello " + store.state.todos.length.toString())),
         builder: (context, callback) => FloatingActionButton(
-            onPressed: callback,
-            child: Icon(Icons.add),
-          ),
+              onPressed: callback,
+              child: Icon(Icons.add),
+            ),
       ),
     );
   }
 
-  Widget buildTodoItem(Todo todo) => StoreConnector<AppState, Function(bool)>(
-      converter: (store) => (b) => store.dispatch(CheckTodoAction(todo, b)),
-      builder: (context, callback) => Card(
-          child: CheckboxListTile(
-              title: Text(todo.name),
-              value: todo.checked,
-              controlAffinity: ListTileControlAffinity.leading,
-              onChanged: callback)));
+  Widget buildTodoItem(Todo todo, Function(Todo) callback) => Card(
+      child: CheckboxListTile(
+          title: Text(todo.name),
+          value: todo.checked,
+          controlAffinity: ListTileControlAffinity.leading,
+          onChanged: (b) => callback(todo)));
 }
