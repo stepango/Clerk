@@ -1,19 +1,30 @@
 import 'package:clerk/state.dart';
+import 'package:flutter/cupertino.dart';
 
 abstract class Action {}
 
+@immutable
 class AddTodoAction extends Action {
-  String todo;
+  final String todo;
 
   AddTodoAction(
     this.todo,
   );
 }
 
+@immutable
 class CheckTodoAction extends Action {
-  Todo todo;
+  final Todo todo;
 
   CheckTodoAction(
     this.todo,
   );
+}
+
+@immutable
+class ReorderAction {
+  final int oldI;
+  final int newI;
+
+  ReorderAction(this.oldI, this.newI);
 }

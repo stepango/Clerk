@@ -6,9 +6,24 @@ AppState reduce(AppState state, dynamic action) {
     return addTodo(state, action);
   } else if (action is CheckTodoAction) {
     return checkTodo(state, action);
+  } else if (action is ReorderAction) {
+    return reorderTodo(state, action);
   }
   return state;
 }
+
+AppState reorderTodo(AppState state, ReorderAction action) =>
+    state.rebuild((stateBuilder) {
+      var list = state.todos.toList();
+      var fromOld = list.removeAt(action.oldI);
+      if (action.newI >= list.length)
+        list.add(fromOld);
+      else
+        list.insert(action.newI, fromOld);
+      return stateBuilder
+        ..todos.update((listBuilder) => listBuilder.replace(list))
+        ..build();
+    });
 
 AppState checkTodo(AppState state, CheckTodoAction action) =>
     state.rebuild((stateBuilder) => stateBuilder.todos.update((update) => update

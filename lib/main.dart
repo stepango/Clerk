@@ -61,6 +61,29 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                "Clerk",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text("Inbox"),
+            )
+          ],
+        ),
+      ),
       appBar: AppBar(
           title: StoreConnector<AppState, String>(
               converter: (store) => store.state.todos
@@ -69,18 +92,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   .toString(),
               builder: (context, num) => Text(widget.title + num))),
       body: StoreConnector<AppState, TodoListViewModel>(
-          converter: (store) => TodoListViewModel(store.state.todos.toList(),
-              (todo) => store.dispatch(CheckTodoAction(todo))),
-          builder: (context, vm) => Center(child: ListView.builder(
-                itemBuilder: (context, index) {
-                  if (index < vm.todos.length) {
-                    return buildTodoItem(vm.todos[index], vm.callback);
-                  }
-                },
-              ))),
+        converter: (store) => TodoListViewModel(
+              store.state.todos.toList(),
+              (todo) => store.dispatch(CheckTodoAction(todo)),
+              (a, b) => store.dispatch(ReorderAction(a, b)),
+            ),
+        builder: (context, vm) => Center(
+              child: ReorderableListView(
+                children: vm.todos
+                    .map((todo) => buildTodoItem(todo, vm.checkAction))
+                    .toList(),
+                onReorder: (a, b) => vm.reorderAction(a, b),
+              ),
+            ),
+      ),
       floatingActionButton: StoreConnector<AppState, VoidCallback>(
         converter: (store) => () => store.dispatch(
-            AddTodoAction("Hello " + store.state.todos.length.toString())),
+              AddTodoAction("Hello " + store.state.todos.length.toString()),
+            ),
         builder: (context, callback) => FloatingActionButton(
               onPressed: callback,
               child: Icon(Icons.add),
@@ -90,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildTodoItem(Todo todo, Function(Todo) callback) => Card(
+      key: Key(todo.name),
       child: CheckboxListTile(
           title: Text(todo.name),
           value: todo.checked,

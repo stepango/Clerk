@@ -1,9 +1,9 @@
 import 'state.dart';
 
-class TodoListViewModel{
+class TodoListViewModel {
   final List<Todo> todos;
-  final Function(Todo) callback;
+  final Function(Todo) checkAction;
+  final Function(int, int) reorderAction;
 
-  TodoListViewModel(this.todos, this.callback);
-
+  TodoListViewModel(this.todos, this.checkAction, this.reorderAction);
 }

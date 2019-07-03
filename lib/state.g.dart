@@ -108,9 +108,6 @@ class _$Todo extends Todo {
     if (name == null) {
       throw new BuiltValueNullFieldError('Todo', 'name');
     }
-    if (checked == null) {
-      throw new BuiltValueNullFieldError('Todo', 'checked');
-    }
   }
 
   @override
