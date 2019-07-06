@@ -9,11 +9,13 @@ part of 'state.dart';
 class _$AppState extends AppState {
   @override
   final BuiltList<Todo> todos;
+  @override
+  final String todoText;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.todos}) : super._() {
+  _$AppState._({this.todos, this.todoText}) : super._() {
     if (todos == null) {
       throw new BuiltValueNullFieldError('AppState', 'todos');
     }
@@ -29,17 +31,21 @@ class _$AppState extends AppState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is AppState && todos == other.todos;
+    return other is AppState &&
+        todos == other.todos &&
+        todoText == other.todoText;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, todos.hashCode));
+    return $jf($jc($jc(0, todos.hashCode), todoText.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('AppState')..add('todos', todos))
+    return (newBuiltValueToStringHelper('AppState')
+          ..add('todos', todos)
+          ..add('todoText', todoText))
         .toString();
   }
 }
@@ -51,11 +57,16 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   ListBuilder<Todo> get todos => _$this._todos ??= new ListBuilder<Todo>();
   set todos(ListBuilder<Todo> todos) => _$this._todos = todos;
 
+  String _todoText;
+  String get todoText => _$this._todoText;
+  set todoText(String todoText) => _$this._todoText = todoText;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
     if (_$v != null) {
       _todos = _$v.todos?.toBuilder();
+      _todoText = _$v.todoText;
       _$v = null;
     }
     return this;
@@ -78,7 +89,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   _$AppState build() {
     _$AppState _$result;
     try {
-      _$result = _$v ?? new _$AppState._(todos: todos.build());
+      _$result =
+          _$v ?? new _$AppState._(todos: todos.build(), todoText: todoText);
     } catch (_) {
       String _$failedField;
       try {
@@ -107,6 +119,9 @@ class _$Todo extends Todo {
   _$Todo._({this.name, this.checked}) : super._() {
     if (name == null) {
       throw new BuiltValueNullFieldError('Todo', 'name');
+    }
+    if (checked == null) {
+      throw new BuiltValueNullFieldError('Todo', 'checked');
     }
   }
 

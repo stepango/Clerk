@@ -11,6 +11,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   BuiltList<Todo> get todos;
 
+  @nullable
+  String get todoText;
+
 }
 
 abstract class Todo implements Built<Todo, TodoBuilder> {

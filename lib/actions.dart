@@ -28,3 +28,10 @@ class ReorderAction {
 
   ReorderAction(this.oldI, this.newI);
 }
+
+@immutable
+class SaveTodoAction {
+  final String text;
+
+  SaveTodoAction(this.text);
+}
