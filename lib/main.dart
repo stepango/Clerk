@@ -17,15 +17,13 @@ class MyApp extends StatelessWidget {
   MyApp(this.store);
 
   @override
-  Widget build(BuildContext context) {
-    return StoreProvider<AppState>(
-        store: store,
-        child: MaterialApp(
-          title: appName,
-          theme: ThemeData(primarySwatch: Colors.blue),
-          home: MyHomePage(title: appName),
-        ));
-  }
+  Widget build(BuildContext context) => StoreProvider<AppState>(
+      store: store,
+      child: MaterialApp(
+        title: appName,
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: MyHomePage(title: appName),
+      ));
 }
 
 class MyHomePage extends StatefulWidget {
@@ -55,68 +53,88 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                widget.title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text("Inbox"),
-            )
-          ],
-        ),
-      ),
-      appBar: AppBar(title: Text(widget.title)),
-      body: StoreConnector<AppState, TodoListViewModel>(
-          converter: (store) => TodoListViewModel(store),
-          builder: (context, vm) {
-            controller.value = controller.value.copyWith(text: vm.todoText);
-            return SafeArea(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: ReorderableListView(
-                      children: vm.todos
-                          .map((todo) => buildTodoItem(todo, vm.checkAction))
-                          .toList(),
-                      onReorder: vm.reorderAction,
-                    ),
-                  ),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: TextField(
-                        focusNode: focusNode,
-                        maxLines: 1,
-                        controller: controller,
-                        decoration: InputDecoration(
-                            border: InputBorder.none, hintText: "New Todo"),
-                        onSubmitted: (msg) {
-                          vm.addTodo(msg);
-                          FocusScope.of(context).requestFocus(focusNode);
-                        },
-                        onChanged: vm.saveText,
+    return StoreConnector<AppState, TodoListViewModel>(
+        converter: (store) => TodoListViewModel(store),
+        builder: (context, vm) {
+          return Scaffold(
+              drawer: Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                      ),
+                      child: Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  )
-                ],
+                    ListTile(
+                      title: Row(children: <Widget>[
+                        Expanded(
+                            child: Text(
+                          "Inbox",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        )),
+                        Container(
+                          child: Center(
+                              child: Text(
+                            vm.todoAmount,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )),
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.red),
+                        )
+                      ]),
+                    )
+                  ],
+                ),
               ),
-            );
-          }),
-    );
+              appBar: AppBar(title: Text(widget.title)),
+              body: SafeArea(
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: ReorderableListView(
+                        children: vm.todos
+                            .map((todo) => buildTodoItem(todo, vm.checkAction))
+                            .toList(),
+                        onReorder: vm.reorderAction,
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TextField(
+                          focusNode: focusNode,
+                          maxLines: 1,
+                          controller: controller,
+                          decoration: InputDecoration(
+                              border: InputBorder.none, hintText: "New Todo"),
+                          onSubmitted: (msg) {
+                            vm.addTodo(msg);
+                            FocusScope.of(context).requestFocus(focusNode);
+                          },
+                          onChanged: vm.saveText,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ));
+        });
   }
 
   Widget buildTodoItem(Todo todo, Function(Todo) callback) => Card(

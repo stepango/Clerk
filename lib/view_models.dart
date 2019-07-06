@@ -26,4 +26,6 @@ class TodoListViewModel {
 
   String get todoText => store.state.todoText;
 
+  String get todoAmount => todos.length.toString();
+
 }
