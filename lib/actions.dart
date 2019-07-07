@@ -1,9 +1,8 @@
 import 'package:clerk/state.dart';
-import 'package:flutter/cupertino.dart';
 
 abstract class Action {}
 
-@immutable
+//@immutable
 class AddTodoAction extends Action {
   final String todo;
 
@@ -12,7 +11,7 @@ class AddTodoAction extends Action {
   );
 }
 
-@immutable
+//@immutable
 class CheckTodoAction extends Action {
   final Todo todo;
 
@@ -21,7 +20,7 @@ class CheckTodoAction extends Action {
   );
 }
 
-@immutable
+//@immutable
 class ReorderAction {
   final int oldI;
   final int newI;
@@ -29,7 +28,7 @@ class ReorderAction {
   ReorderAction(this.oldI, this.newI);
 }
 
-@immutable
+//@immutable
 class SaveTodoAction {
   final String text;
 

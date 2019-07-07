@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
-
 import 'actions.dart';
 import 'state.dart';
 import 'package:redux/redux.dart';
 
-@immutable
+//@immutable
 class TodoListViewModel {
   final Store<AppState> store;
 

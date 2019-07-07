@@ -1,11 +1,17 @@
 import 'package:clerk/reducer.dart';
+import 'package:clerk/redux.dart';
 import 'package:clerk/state.dart';
 import 'package:clerk/view_models.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_web/material.dart';
+//import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+//import 'dart:io' show Platform;
+//import 'package:flutter/foundation.dart' show debugDefaultTargetPlatformOverride;
+
 void main() {
+//  debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  input
   final store = Store<AppState>(reduce, initialState: AppState());
   runApp(MyApp(store));
 }
@@ -128,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             FocusScope.of(context).requestFocus(focusNode);
                           },
                           onChanged: vm.saveText,
+
                         ),
                       ),
                     )
